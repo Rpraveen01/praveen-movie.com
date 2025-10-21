@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Breakup Confirmation 💔</title>
+<style>
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #ff4b5c, #2c2c54);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .container {
+    background: rgba(255,255,255,0.1);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(255, 0, 80, 0.5);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+  }
+
+  h2 {
+    color: #ffb3c6;
+    text-shadow: 0 0 10px #ff8fa3;
+  }
+
+  input, textarea, select, button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+  }
+
+  input, textarea, select {
+    background: rgba(255,255,255,0.2);
+    color: white;
+  }
+
+  button {
+    background: #ff6b81;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  button:hover { background: #ff4757; }
+
+  /* Fingerprint section */
+  .fingerprint-section {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .scanner {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 3px solid #00ffcc;
+    box-shadow: 0 0 20px #00ffcc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-top: 20px;
+  }
+
+  .fingerprint {
+    width: 140px;
+    opacity: 0.3;
+    transition: opacity 0.3s, filter 0.3s;
+  }
+
+  .scanner.active .fingerprint {
+    opacity: 1;
+    filter: drop-shadow(0 0 10px #00ffcc);
+  }
+
+  .scan-line {
+    position: absolute;
+    width: 100%;
+    height: 10px;
+    background: rgba(0,255,204,0.5);
+    top: -10px;
+    display: none;
+    animation: scan 2s linear infinite;
+  }
+
+  .scanner.active .scan-line { display: block; }
+
+  @keyframes scan {
+    0% { top: -10px; }
+    100% { top: 200px; }
+  }
+
+  .message {
+    margin-top: 20px;
+    font-size: 20px;
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+
+  .show { opacity: 1; }
+
+  .granted { color: #00ff99; }
+
+  /* Final page */
+  .final-section {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .final-section img {
+    width: 250px;
+    border-radius: 15px;
+    box-shadow: 0 0 25px red;
+  }
+
+  .final-section h2 {
+    margin-top: 20px;
+    color: #ff4b5c;
+    text-shadow: 0 0 15px #ff4b5c;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Step 1: Breakup Form -->
+  <div id="formSection">
+    <h2>💔 Breakup Form 💔</h2>
+    <form id="breakupForm">
+      <input type="text" placeholder="Your Name" required>
+      <input type="text" placeholder="Praveen" style="color: white; background-color: black; border: 1px solid #ccc; padding: 5px;">
+
+      <select required>
+        <option value="">-- Choose a reason --</option>
+        <option>It’s not you, it’s me 😢</option>
+        <option>I need space 🌌</option>
+        <option>You ate my fries 🍟</option>
+        <option>You don’t share memes 💔</option>
+        <option>Other reason</option>
+      </select>
+      <textarea rows="3" placeholder="Any final words..."></textarea>
+      <button type="submit">Submit Breakup 💌</button>
+    </form>
+  </div>
+
+  <!-- Step 2: Fingerprint -->
+  <div id="fingerprintSection" class="fingerprint-section">
+    <h2>Confirm with Fingerprint 🖐️</h2>
+    <div class="scanner" id="scanner">
+      <img src="F.png.jpg"
+           alt="Fingerprint" class="fingerprint">
+      <div class="scan-line"></div>
+    </div>
+    <div class="message" id="message">Touch to confirm...</div>
+  </div>
+
+  <!-- Step 3: Final Page -->
+  <div id="finalSection" class="final-section">
+    <img src="DD.png"Breakup Over">
+    <h2>It’s Over 💔</h2>
+  </div>
+
+</div>
+
+<script>
+  const formSection = document.getElementById('formSection');
+  const fingerprintSection = document.getElementById('fingerprintSection');
+  const finalSection = document.getElementById('finalSection');
+  const scanner = document.getElementById('scanner');
+  const message = document.getElementById('message');
+  let scanTimeout;
+
+  document.getElementById('breakupForm').addEventListener('submit', e => {
+    e.preventDefault();
+    formSection.style.display = 'none';
+    fingerprintSection.style.display = 'flex';
+  });
+
+  function startScan() {
+    scanner.classList.add('active');
+    message.textContent = "Scanning...";
+    message.classList.add('show');
+    scanTimeout = setTimeout(() => {
+      message.textContent = "Breakup Confirmed 💔";
+      message.classList.add('granted');
+      setTimeout(() => {
+        fingerprintSection.style.display = 'none';
+        finalSection.style.display = 'flex';
+        document.body.style.background = 'black';
+      }, 2000);
+    }, 3000);
+  }
+
+  function stopScan() {
+    scanner.classList.remove('active');
+  }
+
+  scanner.addEventListener('mousedown', startScan);
+  scanner.addEventListener('mouseup', stopScan);
+  scanner.addEventListener('touchstart', startScan);
+  scanner.addEventListener('touchend', stopScan);
+</script>
+</body>
+</html>
